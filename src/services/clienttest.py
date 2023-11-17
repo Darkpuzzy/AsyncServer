@@ -22,7 +22,7 @@ async def tcp_echo_client(message):
         print('Close the connection')
         writer.close()
         await writer.wait_closed()
-
+""""""
 while True:
     try:
         a = input("TEXT -> ")
