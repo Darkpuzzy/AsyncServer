@@ -4,6 +4,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from config import CONVENTION
 
+print(CONVENTION)
 
 class BaseDB(DeclarativeBase):
     metadata = MetaData(naming_convention=CONVENTION)

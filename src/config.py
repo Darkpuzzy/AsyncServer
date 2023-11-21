@@ -13,6 +13,8 @@ DB_PASS = os.environ["POSTGRES_PASSWORD"]
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
+print(DATABASE_URL)
+
 CONVENTION = {
     'all_column_names': lambda constraint, table: '_'.join([column.name for column in constraint.columns.values()]),
     'ix'              : 'ix__%(table_name)s__%(all_column_names)s',

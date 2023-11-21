@@ -11,3 +11,9 @@ class DataBaseOperationError(BaseError):
 
     def __str__(self):
         return f"DB ERROR: {self.message}"
+
+
+class UnknownBaseError(BaseError):
+
+    def __str__(self):
+        return f"Unknown command ---> '{self.message}' \n Enter 'server.help' for open list commands"

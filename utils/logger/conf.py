@@ -1,6 +1,6 @@
 import logging
 
-from config import DEBUG
+from src.config import DEBUG
 
 LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 
