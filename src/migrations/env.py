@@ -1,26 +1,43 @@
+import sys, os
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+import logging
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
-from core.bases.base_database import BaseDB
+# sys.path = ['', '..'] + sys.path[1:]  # patch or sys.path.append(os.path.join(sys.path[0], 'apps'))
+sys.path.append(os.path.join(sys.path[0], 'apps'))
+from config import (DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS)
+from services.computer.models import metadata as comp_metadata
+
+
+print("ENV")
+print(comp_metadata.schema)
+print(comp_metadata.tables)
+print(dir(comp_metadata))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
+section = config.config_ini_section
+config.set_section_option(section, "DB_HOST", DB_HOST)
+config.set_section_option(section, "DB_PORT", DB_PORT)
+config.set_section_option(section, "DB_USER", DB_USER)
+config.set_section_option(section, "DB_NAME", DB_NAME)
+config.set_section_option(section, "DB_PASS", DB_PASS)
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
+logger = logging.getLogger("alembic.env")
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = BaseDB.metadata
+
+# target_metadata = [users_metadata]
+target_metadata = [comp_metadata]
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -60,7 +77,7 @@ def run_migrations_online() -> None:
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -75,6 +92,8 @@ def run_migrations_online() -> None:
 
 
 if context.is_offline_mode():
+    logger.info("Running migrations offline")
     run_migrations_offline()
 else:
+    logger.info("Running migrations online")
     run_migrations_online()
