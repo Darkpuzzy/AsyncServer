@@ -1,4 +1,5 @@
 import os
+from passlib.hash import bcrypt
 
 from dotenv import load_dotenv
 
@@ -10,6 +11,10 @@ DB_PORT = os.environ["POSTGRES_PORT"]
 DB_NAME = os.environ["POSTGRES_DB_NAME"]
 DB_USER = os.environ["POSTGRES_USER"]
 DB_PASS = os.environ["POSTGRES_PASSWORD"]
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+SECRET_SEED = bcrypt.hash(os.environ["SECRET_SEED"])
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 

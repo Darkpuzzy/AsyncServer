@@ -7,9 +7,9 @@ from sqlalchemy import engine_from_config, pool
 
 # sys.path = ['', '..'] + sys.path[1:]  # patch or sys.path.append(os.path.join(sys.path[0], 'apps'))
 sys.path.append(os.path.join(sys.path[0], 'apps'))
-from config import (DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS)
-from services.computer.models import metadata as comp_metadata
-
+from src.config import (DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS)
+from src.services.computer.models import metadata as comp_metadata
+from src.services.users.models import metadata as user_metadata
 
 print("ENV")
 print(comp_metadata.schema)
@@ -36,7 +36,7 @@ logger = logging.getLogger("alembic.env")
 # for 'autogenerate' support
 
 # target_metadata = [users_metadata]
-target_metadata = [comp_metadata]
+target_metadata = [comp_metadata, user_metadata]
 
 
 # other values from the config, defined by the needs of env.py,

@@ -1,8 +1,6 @@
 import logging
 
-from src.config import DEBUG
-
-LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
+LOG_LEVEL = logging.INFO
 
 
 def set_logger():

@@ -1,11 +1,11 @@
 
-from typing import Dict, List, Self
+from typing import Dict, List
 
-from sqlalchemy import ChunkedIteratorResult, insert, or_, select, update
+from sqlalchemy import ChunkedIteratorResult, insert, select, update, delete
 from sqlalchemy.orm.attributes import instance_dict
 
 from src.core.bases.base_exceptions import DataBaseOperationError
-from utils.logger.conf import LOGGER
+from .utils.logger.conf import LOGGER
 
 
 class BaseDAO:
@@ -18,8 +18,7 @@ class BaseDAO:
             async with cls.session() as ses:
                 query = select(
                     cls.model
-                ).where(
-                    cls.model.archived.is_(False))
+                )
                 response = await ses.execute(query)
                 res = await cls._as_dict(response=response,
                                          type_response=list)
@@ -29,7 +28,7 @@ class BaseDAO:
             raise DataBaseOperationError(f"{cls.model.__name__} ERROR")
 
     @classmethod
-    async def get_by_id(  # TODO IF RES IS NOT -> ....
+    async def get_by_id(
             cls,
             obj_id: int
     ):
@@ -38,10 +37,9 @@ class BaseDAO:
                 query = select(
                     cls.model
                 ).where(
-                    cls.model.id == obj_id,
-                    cls.model.archived.is_(False))
+                    cls.model.id == obj_id)
                 response = await ses.execute(query)
-                result = await cls._as_dict(response=response)
+                result = await cls.to_dict(response)
                 if not result:
                     raise DataBaseOperationError("Object not found")
                 return result
@@ -75,8 +73,7 @@ class BaseDAO:
     async def update(
             cls,
             obj_id: int,
-            data: dict,
-            user_id: int
+            data: dict
     ):  # FIXME: returned all model fields
         try:
             data = {key: val for key, val in data.items() if val is not None}
@@ -85,8 +82,6 @@ class BaseDAO:
                     cls.model
                 ).where(
                     cls.model.id == obj_id,
-                    cls.model.user_id == user_id,
-                    cls.model.archived.is_(False)
                 ).values(
                     **data
                 ).returning(
@@ -105,27 +100,17 @@ class BaseDAO:
     @classmethod
     async def delete(
             cls,
-            obj_id: int,
-            user_id: int
+            obj_id: int
     ):
         try:
             async with cls.session() as ses:
-                stmt = update(
+                stmt = delete(
                     cls.model
                 ).where(
-                    cls.model.id == obj_id,
-                    cls.model.user_id == user_id,
-                    cls.model.archived.is_(False)
-                ).values(
-                    archived=True
-                ).returning(
-                    cls.model
+                    cls.model.id == obj_id
                 )
                 res = await ses.execute(stmt)
                 await ses.commit()
-                res = res.fetchone()
-                if not res or res is None:
-                    raise DataBaseOperationError("Not yours or already deleted ")
                 return {"DELETED"}
         except Exception as err:
             LOGGER.exception("BaseDAO ERROR")
@@ -148,13 +133,7 @@ class BaseDAO:
             LOGGER.exception(f"BaseDAO as_dict ERROR: {err}")
             raise DataBaseOperationError(f"{cls.model.__name__} ERROR")
 
-    @classmethod
-    def from_dict(cls, data: dict) -> Self:
-        valid_data: dict = {key: value for key, value in data.items() if key in cls.__dict__}
-        return cls(**valid_data)
-
-    @classmethod
-    def to_dict(cls) -> dict:
-        result: dict = {key: value for key, value in cls.__dict__.items() if not key.startswith('_')}
+    async def to_dict(self) -> dict:
+        result: dict = {key: value for key, value in self.__dict__.items() if not key.startswith('_')}
         return result
 

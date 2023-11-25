@@ -1,6 +1,6 @@
 import asyncio
 from typing import Tuple
-from src.server.commands import commander
+from src.server.commands import commander, loggin, register
 
 active_connections = []
 
@@ -21,41 +21,38 @@ async def handle_echo(
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter
 ) -> None:
-    # if writer not in active_connections:
-    #     writer.write(b"HELLO USER")
+    addr = writer.get_extra_info('peername')
+    print('Connection established with {}'.format(addr))
     data = await reader.read(256)
     msg = data.decode()
-    addr = writer.get_extra_info('peername')
-    info = writer.get_extra_info("socket")
-    """
-    # print(f"Received {msg!r} from {addr!r}")
-    # if writer not in active_connections:
-    #     active_connections.append(writer)
-    # print(len(active_connections))
-    # print(f"Active connections: {active_connections}")
-    # # print(f"Send: {msg!r}")
-    # # print(msg)
-    # await forward_msg_to_clients(writer=writer, addr=addr, msg=data.decode())
-    # # writer.write(data)
-    # if msg == "/main":
-    #     writer.write(b"{Hello pidr}")
-    """
-    print(msg)
-    response: str = await commander(msg=msg)
-    print(response)
-    writer.write(response.encode())
-    await writer.drain()
+    # info = writer.get_extra_info("socket")
+
+    # if "set_password" in msg:
+    #     msg = msg.split("-p")
+    #     password = msg[1].replace(" ", "")
+    #     response: str = await setter_pass(password=password)
+    #     writer.write("Success".encode())
+    #     await writer.drain()
+    # else:
+    if "register" in msg:
+        print(msg)
+        user_data = msg.split("-u")[1].replace(" ", "")
+        print(user_data)
+        response: bool = await register(user_data=user_data)
+        if response:
+            print("AUTH", user_data)
+            token = await loggin(user_data)
+            writer.write(token.encode())
+        await writer.drain()
+    else:
+        response: str = await commander(msg=msg)
+        writer.write(response.encode())
+        await writer.drain()
 
     if msg == ".quit":
         print("Close the connection")
         writer.close()
         await writer.wait_closed()
-
-    # addr = writer.get_extra_info('peername')
-    # local_addr = writer.get_extra_info('sockname')
-    # ssl_context = writer.get_extra_info('sslcontext')
-    # is_server_side = writer.get_extra_info('server_side')
-    # peer_cert = writer.get_extra_info('peercert')
 
 
 async def main():

@@ -5,7 +5,7 @@ from sqlalchemy import (Integer,
 from sqlalchemy.orm import (Mapped,
                             mapped_column, DeclarativeBase)
 
-from config import CONVENTION
+from src.config import CONVENTION
 
 metadata = MetaData(naming_convention=CONVENTION)
 

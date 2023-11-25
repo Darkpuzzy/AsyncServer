@@ -1,2 +1,2 @@
-from .command_map import commander
+from .command_map import commander, loggin, register
 
