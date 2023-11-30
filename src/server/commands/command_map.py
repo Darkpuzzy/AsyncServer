@@ -18,15 +18,10 @@ COMMANDS_MAPS = {
 
 async def commander(msg: str):
     try:
-        msg = msg.split("-t")
-        message = msg[0].replace(" ", "")
-        token = msg[1].replace(" ", "")
-        if await token_check(token):
-            answer = COMMANDS_MAPS.get(message)
-            if answer:
-                return await COMMANDS_MAPS.get(message)()
-            raise UnknownBaseError(msg)
-        raise UnknownBaseError("NOT TOKEN")
+        answer = COMMANDS_MAPS.get(msg)
+        if answer:
+            return await COMMANDS_MAPS.get(msg)()
+        raise UnknownBaseError(msg)
     except Exception as err:
         return f" --- Traceback --- \n {err}"
 

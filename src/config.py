@@ -4,6 +4,7 @@ from passlib.hash import bcrypt
 from dotenv import load_dotenv
 
 DEBUG = True
+
 load_dotenv()
 
 DB_HOST = os.environ["POSTGRES_HOST"]
@@ -11,6 +12,9 @@ DB_PORT = os.environ["POSTGRES_PORT"]
 DB_NAME = os.environ["POSTGRES_DB_NAME"]
 DB_USER = os.environ["POSTGRES_USER"]
 DB_PASS = os.environ["POSTGRES_PASSWORD"]
+
+admins = os.environ["SUPERUSER"]
+SERVER_PASS = os.environ["SERVER_PASSWORD"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

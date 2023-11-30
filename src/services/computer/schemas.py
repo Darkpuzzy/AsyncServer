@@ -24,19 +24,3 @@ class ResponseComputerSchema(BaseComputerSchema):
     created_at: date
     updated_at: date
     connections: bool
-
-
-class VirtualMachine:
-    def __init__(
-            self,
-            id,
-            ram,
-            cpu,
-            disk_size,
-            disk_id
-    ):
-        self.id = id
-        self.ram = ram
-        self.cpu = cpu
-        self.disk_size = disk_size
-        self.disk_id = disk_id

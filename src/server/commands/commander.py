@@ -1,43 +1,41 @@
 import json
 import os
 
-from passlib.hash import bcrypt
-
-from src.config import SECRET_SEED
-from src.services.computer import *
-from src.services.users.subservices import UserManager
-
 
 class ServerCommander:
+
+    admins_commands: str = """
+    'active-connections' -> Show active connections VM\n
+    ### INFO ###\n
+    'all_ram' -> Show all active ram\n
+    'all_cpu' ->\n
+    'all_cd_size' ->\n
+    'all_disc_id' -> \n
+    
+    ### INFO BY ID ###\n
+    get-vm-{id} -> full info for VM\n
+    
+    ### SET ATTRIBUTE ###\n
+    set-vm-{id} cpu/ram/disk_size {arg: int} \n
+    """
+
+    server_command: str = """
+    ### SERVER COMMANDS ###\n
+    ping -> pong\n
+    connect -> init connection to the server for VM!\n
+    help -> help list
+    """
 
     @classmethod
     async def ping(cls) -> str:
         return "pong"
 
     @classmethod
-    async def help(cls) -> str:
-        return " | ping ---> pong\n | help ---> commands list"
+    async def help(cls, admin_status: bool = False) -> str:
+        if admin_status:
+            return cls.admins_commands + cls.server_command
+        return cls.server_command
 
     @classmethod
     async def connection(cls):
         return "CONNECTION"
-
-    @classmethod
-    async def add_user_secret_token(cls, username: str, password: str):
-        data = {}
-        if os.path.exists("server_creds.json"):
-            with open("server_creds.json", "r") as file_read:
-                check_file = file_read.read()
-                if check_file:
-                    data = json.loads(check_file)
-                    print(data)
-                else:
-                    data = {}
-
-        with open("server_creds.json", "w") as f:
-            print(data)
-            token = password
-            data[token] = {"ip": username,  # TODO CHANGE TO IP
-                           "username": username}
-            f.write(json.dumps(data))
-        return token
