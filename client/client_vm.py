@@ -44,9 +44,9 @@ async def auth(
     init_message = "connect_vm"
     writer.write(init_message.encode())
     data = await reader.read(256)
-    print("---------------------------------------------------------|\n")
-    print(data.decode())
-    print("---------------------------------------------------------|\n")
+    print(f"---------------------------------------------------------|\n"
+          f"{data.decode()}\n"
+          f""+"--"*80)
     message: str = input("Password: ")
     writer.write(message.encode())
     await writer.drain()
@@ -65,22 +65,6 @@ async def received(reader: asyncio.StreamReader):
     return answer
 
 
-async def update_vm(msg: str):
-    global vm_example
-    try:
-        print("---"*80)
-        print(msg)
-        data = msg.split("-d")
-        print(data)
-        data_dict: dict = json.loads(data.decode())
-        vm_example = ManagerVM(**data_dict)
-        print("YOUR DATA IS UPDATED-------------------------")
-        print(vm_example.get_full_info())
-        return "SUCCESS UPDATED"
-    except Exception as err:
-        print("CLIENT ERROR\n", err)
-
-
 async def client_tcp_vm(reader: StreamReader, writer: StreamWriter):
     first_auth = await auth(writer=writer, reader=reader)
 
@@ -88,8 +72,6 @@ async def client_tcp_vm(reader: StreamReader, writer: StreamWriter):
         print('Close the connection')
         writer.close()
         await writer.wait_closed()
-
-    await writer.drain()
 
     while True:
         try:
@@ -103,9 +85,7 @@ async def client_tcp_vm(reader: StreamReader, writer: StreamWriter):
             else:
                 writer.write(message.encode())
                 await writer.drain()
-                # data = await reader.read(256)
-                # await writer.drain()
-                # answer = data.decode()
+
                 answer = await received(reader=reader)
 
                 print("Server message\n", answer)

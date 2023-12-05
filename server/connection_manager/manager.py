@@ -63,7 +63,7 @@ class ConnectManager:
             answer: str = None
     ) -> str:
         if answer == "admin_pong":
-            cls.active_connections.get(writer)["status"] = False
+            cls.active_connections.get(writer)["status"] = True
         else:
             cls.active_connections.get(writer)["status"] = False
         print(cls.active_connections)

@@ -40,12 +40,12 @@ async def client_tcp_admin(reader: StreamReader, writer: StreamWriter):
         try:
             message: str = input("Command: ")
             if message == "":
-                continue
+                message = "."
 
             writer.write(message.encode())
             await writer.drain()
 
-            data = await reader.read(600)
+            data = await reader.read(650)
             answer = data.decode()
 
             print("Server message\n", answer)

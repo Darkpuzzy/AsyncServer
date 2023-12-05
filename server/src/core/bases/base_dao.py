@@ -128,7 +128,7 @@ class BaseDAO:
             if type_response is None and result:
                 return instance_dict(result[0])
             elif type_response is list and result:
-                return [instance_dict(obj) for obj in result]
+                return [await cls.to_dict(obj) for obj in result]
             return result
         except Exception as err:
             LOGGER.exception(f"BaseDAO as_dict ERROR: {err}")

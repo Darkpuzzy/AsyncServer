@@ -1,12 +1,14 @@
-from typing import List
+import asyncio
+from typing import List, AsyncGenerator
 
 from .schemas import ResponseComputerSchema, CreateComputerSchema, UpdateComputerSchema, \
     ResponseVMSchemaWithoutDate
 from .subservices import ComputerDAO
 
 
-async def get_all() -> List[ResponseComputerSchema]:
-    return await ComputerDAO.get_all()
+async def get_all() -> AsyncGenerator:
+    for item in await ComputerDAO.get_all():
+        yield ResponseVMSchemaWithoutDate(**item).model_dump()
 
 
 async def get_by_id(comp_id: int) -> ResponseVMSchemaWithoutDate:
@@ -25,9 +27,9 @@ async def update(
 
 
 # async def tests():
-#     # print(await get_all())
-#     print(ResponseComputerSchema(**await get_by_id(12)).__dict__)
-#
-#
+#     print("TEST")
+#     print(type(get_all))
+#     async for obj in get_all():
+#         print(obj)
 #
 # print(asyncio.run(tests()))

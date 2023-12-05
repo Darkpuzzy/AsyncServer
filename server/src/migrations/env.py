@@ -7,8 +7,8 @@ from sqlalchemy import engine_from_config, pool
 
 # sys.path = ['', '..'] + sys.path[1:]  # patch or sys.path.append(os.path.join(sys.path[0], 'apps'))
 sys.path.append(os.path.join(sys.path[0], 'apps'))
-from server.src.config import (DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS)
-from server.src.services.computer.models import metadata as comp_metadata
+from src.config import (DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS)
+from src.services.computer.models import metadata as comp_metadata
 
 
 # this is the Alembic Config object, which provides

@@ -1,7 +1,7 @@
 
-from ...db.database import async_session_maker
+from src.db.database import async_session_maker
 from .models import VirtualComputer
-from ...core.bases.base_dao import BaseDAO
+from src.core.bases.base_dao import BaseDAO
 
 
 class ComputerDAO(BaseDAO):
