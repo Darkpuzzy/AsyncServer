@@ -1,0 +1,52 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+exclude: migrations|manage.py|asgi.py|wsgi.py|redis|spam
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  # Black format
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3.10
+        entry: black --config pyproject.toml .
+
+  # Isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+
+  # Ruff check
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.1
+    hooks:
+      - id: ruff
+        name: Ruff checker (python)
+        entry: python -m ruff check --config pyproject.toml .
+
+  # flake8
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        name: Flake8 (python)
+        entry: python -m flake8 --config=tox.ini .
+
+#  # Tests if not use pytest-watcher
+#  - repo: local
+#    hooks:
+#      - id: auto-test
+#        name: auto-tests
+#        entry: python -m pytest ./tests
+##        always_run: true
+#        pass_filenames: false
+#        language: system

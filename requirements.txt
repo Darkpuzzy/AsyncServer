@@ -1,0 +1,36 @@
+alembic==1.12.1
+annotated-types==0.6.0
+greenlet==3.0.1
+Mako==1.3.0
+MarkupSafe==2.1.3
+pydantic==2.5.1
+pydantic_core==2.14.3
+python-dotenv==1.0.0
+SQLAlchemy==2.0.23
+typing_extensions==4.8.0
+asyncpg==0.27.0
+
+# Testing
+pytest-asyncio==0.21.1
+sqlalchemy_utils==0.41.1  # For migrations tests
+yarl==1.9.2  # For migrations tests
+pytest-picked==0.5.0 # For test inline watcher
+pytest-testmon==2.1.0 # For test inline watcher
+pytest-watch==4.2.0 # For test inline watcher
+Faker==20.1.0 # For create random fake user object
+
+# pytest-xdist==3.4.0  # For run tests multithreading, not working because bad tests isolation. Using one DB for all tests.
+
+# Linters
+ruff==0.1.5
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+flake8-cognitive-complexity==0.1.0  # Check cognitive functions complexity
+flake8-functions==0.0.8  # Count agruments of functions, max=6
+flake8-variables-names==0.0.6  # Check variables names not in black list (a, foo)
+
+# Deploy
+pre-commit==3.5.0
+
+# flake8-expression-complexity - Check exmpression complexity (not supports SQLAlchemy queries, only DjangoORM queries)
