@@ -85,6 +85,31 @@ async def show_all_gen(
     await writer.drain()
 
 
+async def active_connections_gen(
+        writer: asyncio.StreamWriter,
+        reader: asyncio.StreamReader,
+        answer
+):
+    while True:
+        try:
+            async for chunk in answer():
+                chunk_json = json.dumps(chunk)
+                writer.write(chunk_json.encode())
+                await writer.drain()
+                data = await reader.read(256)
+                print("data_finish", data.decode())
+            writer.write("all data".encode())
+            break
+        except StopAsyncIteration as err:
+            print("ERROR", err)
+            writer.write("--------".encode())
+            await writer.drain()
+            break
+
+    writer.write("--------------------".encode())
+    await writer.drain()
+
+
 async def forward_to_adm(writer, addr, message):
     if ConnectManager.admin_connections != {}:
         for w in ConnectManager.admin_connections:

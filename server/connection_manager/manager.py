@@ -1,5 +1,6 @@
 import asyncio
 import json
+from typing import AsyncGenerator
 
 
 class ConnectManager:
@@ -80,11 +81,13 @@ class ConnectManager:
     @classmethod
     async def show_all_connections(
             cls
-    ) -> str:
+    ) -> AsyncGenerator:
         try:
             print("ADMINS", cls.admin_connections)
 
-            response_data = f"Admins-------------------:\n{cls.admin_connections}\nVM-------------------:\n{cls.active_connections}"
-            return response_data
+            response_data = f"{cls.active_connections}"
+            for values in cls.active_connections.values():
+                values["info"] = values["info"].model_dump()
+                yield values
         except Exception as err:
             print("SERVER ERROR", err)

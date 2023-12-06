@@ -24,7 +24,7 @@ class ServerCommander:
 
     'all_ram' -> Show total ram
     'all_cpu' -> total cpu
-    'all_cd_size' -> total disc size
+    'all_disc' -> total disc size
     'all_info' -> Show total info from DB for VM
 
     ### INFO VM ###

@@ -7,7 +7,7 @@ from handle_process import (
     show_all_gen,
     forward_to_adm,
     forward,
-    auth)
+    auth, active_connections_gen)
 
 from src.commands import commander_maps
 
@@ -29,9 +29,18 @@ async def hub_adm(
             continue
 
         if msg == "active-connections":
-            result: str = await ConnectManager.show_all_connections()
-            writer.write(result.encode())
-            await writer.drain()
+            try:
+                result = ConnectManager.show_all_connections
+                await active_connections_gen(
+                    writer=writer,
+                    reader=reader,
+                    answer=result
+                )
+                # writer.write(result.encode())
+                # await writer.drain()
+            except Exception as err:
+                writer.write(str(err).encode())
+                await writer.drain()
             continue
 
         if msg == "update_con":
