@@ -19,6 +19,8 @@ pip install -r requirements.txt
 
 Migrations alembic:
 ```
+cd server/
+
 alembic upgrade head
 ```
 
