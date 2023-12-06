@@ -45,7 +45,7 @@ async def client_tcp_admin(reader: StreamReader, writer: StreamWriter):
             writer.write(message.encode())
             await writer.drain()
 
-            data = await reader.read(650)
+            data = await reader.read(700)
             answer = data.decode()
 
             print("Server message\n", answer)
