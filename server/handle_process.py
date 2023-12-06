@@ -37,11 +37,15 @@ async def connection(
     return status
 
 
-async def show_by_id(
+async def action_by_id(
         writer: asyncio.StreamWriter,
         reader: asyncio.StreamReader,
         msg: str
 ) -> None:
+    """
+    GET BY ID method,
+    DELETE method
+    """
     while True:
         try:
             answer: dict = await commander_maps(msg, admin=True)

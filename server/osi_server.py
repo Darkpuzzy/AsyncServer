@@ -3,7 +3,7 @@ import asyncio
 from connection_manager.manager import ConnectManager
 from handle_process import (
     connection,
-    show_by_id,
+    action_by_id,
     show_all_gen,
     forward_to_adm,
     forward,
@@ -43,8 +43,8 @@ async def hub_adm(
             writer.write("await".encode())
             continue
 
-        if "show_obj" in msg:
-            await show_by_id(
+        if "show_obj" in msg or "delete_obj" in msg:
+            await action_by_id(
                 writer=writer,
                 reader=reader,
                 msg=msg

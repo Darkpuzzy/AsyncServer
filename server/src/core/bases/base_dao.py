@@ -110,9 +110,9 @@ class BaseDAO:
                 ).where(
                     cls.model.id == obj_id
                 )
-                res = await ses.execute(stmt)
+                await ses.execute(stmt)
                 await ses.commit()
-                return {"DELETED"}
+                return {"DELETED": "success"}
         except Exception as err:
             LOGGER.exception("BaseDAO ERROR")
             raise DataBaseOperationError(f"{cls.model.__name__} ERROR {err}")
