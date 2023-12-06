@@ -24,6 +24,8 @@ sdist/
 var/
 wheels/
 share/python-wheels/
+.ruff_cache/
+/.ruff_cache/
 *.egg-info/
 .installed.cfg
 *.egg
