@@ -1,5 +1,5 @@
 # Async Sockets Server and Client manager
-Test task for RED OS Inc.
+
 ---
 
 _Install requirements_
@@ -51,10 +51,6 @@ python client/client_vm.py
 
 _For a client, enter ___help___ in terminal_
 
-
-# Reference task
-
-[Show Task](redos_test.txt)
 
 # _Stack_
 
