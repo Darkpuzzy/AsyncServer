@@ -1,4 +1,4 @@
-# redos_client
+# Async Sockets Server and Client manager
 Test task for RED OS Inc.
 ---
 
